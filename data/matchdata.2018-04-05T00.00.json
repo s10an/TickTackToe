@@ -1,0 +1,161 @@
+{
+    "playerXName": "name1",
+    "playerOName": "name2",
+    "firstMove": [
+        {
+            "position": [
+                "x",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        },
+        {
+            "position": [
+                " ",
+                " ",
+                " ",
+                " ",
+                "x",
+                " ",
+                " ",
+                " ",
+                " "
+            ],
+            "markerToMove": "o",
+            "GameStatus": 3
+        }
+    ],
+    "playerNameToStart": "name1",
+    "playerXWins": 5,
+    "playerOWins": 3,
+    "draws": 2,
+    "numberOfGames": 10
+}
