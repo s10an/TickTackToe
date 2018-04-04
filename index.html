@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="site.css" />
+    </head>
+    <body>
+        <div class"contaier">
+            <h1>TicTacToe simulator</h1>
+            <div class="col-md-5 machine">
+                <form>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Player 1</label>
+                        <div class="col-sm-8">
+                            <select id="player1Select" class="form-control">
+                                    <option value="1">Random player</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Player1 name</label>
+                        <div class="col-sm-8">
+                            <input id="inputnameplayer1" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Player 2</label>
+                        <div class="col-sm-8">
+                            <select id="player2Select" class="form-control">
+                                    <option value="2">Random player</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Player2 name</label>
+                        <div class="col-sm-8">
+                            <input id="inputnameplayer2" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Number of games</label>
+                        <div class="col-sm-8">
+                            <input id="inputgames" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="control-label col-sm-4">Enable machine learning</label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input type="checkbox" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                                
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <button class="btn btn-primary startButton" data-bind="click: play">Play</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-1">&nbsp;</div>
+            <div class="col-md-6" class="statisticscontainer text-info">
+                <h4>result</h4>
+                <div>
+                    <label class="">Number of games played: </label><label class="">10</label>
+                </div>
+                <div>
+                    <label class="">Player1 win: </label><label class="">2</label>
+                </div>
+                <div>
+                    <label class="">Player2 win: </label><label class="">3</label>
+                </div>
+                <div>
+                    <label class="">Draws: </label><label class="">5</label>
+                </div>
+                
+            </div>
+        </div>
+        <script src="js/lib/knockout-3.4.2.js"></script>
+        <script src="js/app.js" ></script>
+    </body>
+</html>
