@@ -1,0 +1,15 @@
+{
+    "position": [
+        "x",
+        " ",
+        " ",
+        "x",
+        "o",
+        " ",
+        "x",
+        " ",
+        "o"
+    ],
+    "markerToMove": "x",
+    "GameStatus": 0
+}
