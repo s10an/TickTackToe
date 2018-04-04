@@ -1,13 +1,14 @@
 import {markers} from "./../enums/markers";
 import {board} from "./../common/board";
+import {utils} from "./../common/utils";
 import {gameStatuses} from "./../enums/gameStatuses";
 import {playerRandom} from "./../players/playerRandom";
 import 'mocha';
 import { expect } from 'chai';
 import { assert } from 'chai';
 
-var testRandomPlayerO = new playerRandom(markers.o, "testPlayerO", true);
-var testRandomPlayerX = new playerRandom(markers.x, "testPlayerX", false);
+var testRandomPlayerO = new playerRandom(markers.o, "testPlayerO");
+var testRandomPlayerX = new playerRandom(markers.x, "testPlayerX");
 
 describe('playerRandom - test random player and playerBase methodes', () => {
     it("should return marker.x", () =>{
@@ -22,17 +23,17 @@ describe('playerRandom - test random player and playerBase methodes', () => {
     });
 
     it("should return value between or equal to 0 - 1", () =>{
-        let randomNumber = testRandomPlayerX.randomInt(0,1);        
+        let randomNumber = utils.randomInt(0,1);        
         expect(randomNumber).to.oneOf([0,1]);
     });
 
     it("should return value between or equal to 0 - 4", () =>{
-        let randomNumber = testRandomPlayerO.randomInt(0,4);        
+        let randomNumber = utils.randomInt(0,4);        
         expect(randomNumber).to.oneOf([0,1,2,3,4]);
     });
 
     it("should return value between or equal to 0 - 9", () =>{
-        let randomNumber = testRandomPlayerO.randomInt(0,9);        
+        let randomNumber = utils.randomInt(0,9);        
         expect(randomNumber).to.oneOf([0,1,2,3,4,,5,6,7,8,9]);
     });
 
