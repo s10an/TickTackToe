@@ -10,7 +10,7 @@ var engine = new matchEngine();
 
 describe('gameEngine - tests', () => {
     it("write output", () =>{
-        engine.StartTrainingMatch();
+        engine.StartMatch(true);
         //let testBoard = new board(positionXwin1, markers.o);
         //assert.doesNotThrow(testBoard.ValidatePosition,Error )
     });

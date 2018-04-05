@@ -22,10 +22,10 @@ export class matchEngine{
 
     public numberOfGames : number = 10;
 
-    public StartTrainingMatch = () : void => {
+    public StartMatch = (learingMode : boolean) : void => {
         // set up players
-        let player1 : iPlayer = new playerRandom(markers.x, "name1");
-        let player2 : iPlayer = new playerRandom(markers.o, "name2");
+        let player1 : iPlayer = new playerRandom(markers.x, "name1", learingMode);
+        let player2 : iPlayer = new playerRandom(markers.o, "name2", learingMode);
         let playerToMoveFirst = player1;
         // Players turn to start
          matchStatistics.initPlayers(player1, player2, playerToMoveFirst);
@@ -36,7 +36,7 @@ export class matchEngine{
         }
         let dateTime = dateTimeUtil.getCurrentDateTime();
         fileUtils.saveObjectToFile("./data/matchdata."+dateTime+".json", matchStatistics.stats)
-        console.log(matchStatistics.stats);
+        //console.log(matchStatistics.stats);
     }
 
     public Play = (player1: iPlayer, player2: iPlayer, playerToStart: iPlayer) : void =>

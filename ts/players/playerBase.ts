@@ -3,7 +3,7 @@ import {board} from "./../common/board"
 import {iPlayer} from "./interfaces/iPlayer";
 
 export abstract class playerBase implements iPlayer {
-    constructor(public readonly playerMarker : markers, public readonly playerName : string){
+    constructor(public readonly playerMarker : markers, public readonly playerName : string, public learingMode : boolean){
     }
     abstract readonly PlayerEngineId : number;
 
@@ -30,7 +30,7 @@ export abstract class playerBase implements iPlayer {
 
     abstract CalculateMove = (currentBoard : board) : number => {return 0};
 
-    abstract MachineLearning = (completeGame : Array<board>) => {};
+    abstract LearnFromGame = (completeGame : Array<board>) => {};
 
     
 }

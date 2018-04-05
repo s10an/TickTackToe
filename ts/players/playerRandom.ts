@@ -5,7 +5,7 @@ import {utils} from "./../common/utils";
 
 export class playerRandom extends playerBase  {
 
-    readonly PlayerEngineId = 1;
+    readonly PlayerEngineId = 1000;
 
     CalculateMove = (currentBoard : board) : number => {
         let moveIndex = 0;
@@ -20,7 +20,7 @@ export class playerRandom extends playerBase  {
         return moveIndex;
     }
 
-    public MachineLearning = (completeGame : Array<board>) => {
+    public LearnFromGame = (completeGame : Array<board>) => {
         // Implemet machine learning
     }
 

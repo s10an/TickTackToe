@@ -7,8 +7,8 @@ import 'mocha';
 import { expect } from 'chai';
 import { assert } from 'chai';
 
-var testRandomPlayerO = new playerRandom(markers.o, "testPlayerO");
-var testRandomPlayerX = new playerRandom(markers.x, "testPlayerX");
+var testRandomPlayerO = new playerRandom(markers.o, "testPlayerO", false);
+var testRandomPlayerX = new playerRandom(markers.x, "testPlayerX", false);
 
 describe('playerRandom - test random player and playerBase methodes', () => {
     it("should return marker.x", () =>{
