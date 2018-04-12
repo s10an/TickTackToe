@@ -8,18 +8,30 @@ export class board{
 
     readonly GameStatus: gameStatuses;
 
-    constructor(public position: Array<markers>, public markerToMove: markers){
+    constructor(public position: Array<markers>, public markerToMove: markers, public playerResign : boolean){
         this.ValidatePosition();
         // Set gamestatus (winning, draw or playable)
         this.GameStatus = this.GetGameStatus();
     }
 
     public GetGameStatus = (): gameStatuses => {
+        if(this.playerResign) {
+            if (this.CheckPositionWinning(markers.x))  return gameStatuses.xresign ;
+            else return  gameStatuses.oresign;    
+        }
         if (this.CheckPositionWinning(markers.x))  return gameStatuses.xwins ;
         if (this.CheckPositionWinning(markers.o)) return  gameStatuses.owins;
         if(this.CheckNoLegalMoves()) return gameStatuses.draw;
         return gameStatuses.play;
         
+    }
+
+    protected GetNewPosition = (moveIndex: number, currentBoard: board, playerMarker : markers) : Array<markers> => {
+        let newPosition = currentBoard.position.slice(0);
+        if(moveIndex < 0 || moveIndex > 8 ) throw Error("Illegal move");
+        if(newPosition[moveIndex] != markers.b) throw Error("Player marker already at this position");
+        newPosition[moveIndex] = playerMarker;
+        return newPosition;
     }
 
     private CheckPositionWinning = (marker: markers) : boolean => {
@@ -46,10 +58,13 @@ export class board{
     }
 
     public ValidatePosition = () : void => {
+
         // Check if array length is correct
         if(this.position.length != 9) throw new Error("Invalid position");
         // Check no marker is no set to be in the move
         if(this.markerToMove === markers.b) throw new Error("Invalid marker in move"); 
+        
+        
         // Check if diff between o and x markers are correct
         let xMarkers = this.position.filter(function(marker){
             return (marker === markers.x);
@@ -57,11 +72,17 @@ export class board{
         let oMarkers = this.position.filter(function(marker){
             return marker === markers.o;
         })
-        if(xMarkers.length - oMarkers.length == 0 ) return; 
-        if(this.markerToMove === markers.x) xMarkers.push(markers.x);
-        else oMarkers.push(markers.o);
+        if(xMarkers.length - oMarkers.length == 0 ) return;
+        if(this.playerResign){
+            if(this.markerToMove === markers.o) xMarkers.push(markers.x);
+            else oMarkers.push(markers.o);
+        }
+        else{
+             
+            if(this.markerToMove === markers.x) xMarkers.push(markers.x);
+            else oMarkers.push(markers.o);
+        }
         if(xMarkers.length - oMarkers.length == 0) return;
-
         throw new Error("Diff between markers on board are wrong");
     }
 }

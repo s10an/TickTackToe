@@ -24,5 +24,8 @@ export class playerRandom extends playerBase  {
         // Implemet machine learning
     }
 
+    public loadKnowledge = () : void => {
+    }
+
 
 }

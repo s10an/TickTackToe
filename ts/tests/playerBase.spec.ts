@@ -43,7 +43,7 @@ describe('playerRandom - test random player and playerBase methodes', () => {
             markers.x, markers.x, markers.x,
             markers.b, markers.x, markers.b
         ]
-        let testBoard = new board(testPosition, markers.o);
+        let testBoard = new board(testPosition, markers.o, false);
         let moveIndex = testRandomPlayerO.CalculateMove(testBoard);       
         expect(moveIndex).to.oneOf([6,8]);
     });
@@ -54,7 +54,7 @@ describe('playerRandom - test random player and playerBase methodes', () => {
             markers.b, markers.b, markers.b,
             markers.b, markers.o, markers.b
         ]
-        let testBoard = new board(testPosition, markers.x);
+        let testBoard = new board(testPosition, markers.x, false);
         let moveIndex = testRandomPlayerO.CalculateMove(testBoard);   
         //console.log(moveIndex); 
         expect(moveIndex).to.oneOf([0,1,2,3,4,5,6,8]);
@@ -66,7 +66,7 @@ describe('playerRandom - test random player and playerBase methodes', () => {
             markers.o, markers.x, markers.b,
             markers.b, markers.o, markers.b
         ]
-        let testBoardMove1 = new board(testPositionMove1, markers.x);
+        let testBoardMove1 = new board(testPositionMove1, markers.x, false);
 
         let newBoard = testRandomPlayerX.Move(testBoardMove1);
         //console.log("board after move: " + newBoard.position);
@@ -84,7 +84,7 @@ describe('playerRandom - test random player and playerBase methodes', () => {
             markers.o, markers.x, markers.b,
             markers.b, markers.o, markers.b
         ]
-        let testBoardMove1 = new board(testPositionMove1, markers.x);
+        let testBoardMove1 = new board(testPositionMove1, markers.x, false);
         let newBoard = testRandomPlayerX.Move(testBoardMove1);
         //console.log("board after move: " + newBoard.position);
         let oMarkers = newBoard.position.filter(function(marker){

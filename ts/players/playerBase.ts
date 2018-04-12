@@ -8,10 +8,16 @@ export abstract class playerBase implements iPlayer {
     abstract readonly PlayerEngineId : number;
 
     public Move = (currentBoard : board) : board => {
-        let moveIndex = this.CalculateMove(currentBoard);
-        let newPostition = this.GetNewPosition(moveIndex, currentBoard);
+        let moveIndex = this.CalculateMove(currentBoard); 
+        let playerResign : boolean = false;
+        let newPostition = new Array<markers>();
+        if(moveIndex == -1){
+            playerResign = true;
+            newPostition = currentBoard.position;
+        }
+        else newPostition = this.GetNewPosition(moveIndex, currentBoard); 
         let opponentsMarker = this.GetOpponentsMarker();
-        let newBoard = new board(newPostition, opponentsMarker)
+        let newBoard = new board(newPostition, opponentsMarker, playerResign);
         return newBoard;
     }
 
@@ -31,6 +37,8 @@ export abstract class playerBase implements iPlayer {
     abstract CalculateMove = (currentBoard : board) : number => {return 0};
 
     abstract LearnFromGame = (completeGame : Array<board>) => {};
+
+    abstract loadKnowledge = () : void => {};
 
     
 }

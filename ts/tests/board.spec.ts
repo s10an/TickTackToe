@@ -17,7 +17,7 @@ describe('Board - validatePosition', () => {
             markers.b, markers.b, markers.b,
             markers.b, markers.b, markers.b
         ]
-        let testBoard = new board(positionXwin1, markers.o);
+        let testBoard = new board(positionXwin1, markers.o, false);
         assert.doesNotThrow(testBoard.ValidatePosition,Error )
     });
     it("should not throw", () =>{
@@ -26,7 +26,7 @@ describe('Board - validatePosition', () => {
             markers.x, markers.x, markers.x,
             markers.b, markers.x, markers.b
         ]
-        let testBoard = new board(positionXwin1, markers.o);
+        let testBoard = new board(positionXwin1, markers.o, false);
         assert.doesNotThrow(testBoard.ValidatePosition,Error )
     });
     it("should not throw", () =>{
@@ -35,16 +35,16 @@ describe('Board - validatePosition', () => {
             markers.x, markers.x, markers.x,
             markers.b, markers.b, markers.b
         ]
-        let testBoard = new board(positionXwin1, markers.o);
+        let testBoard = new board(positionXwin1, markers.o, false);
         assert.doesNotThrow(testBoard.ValidatePosition,Error )
     });
     it("should throw", () =>{
         let positionXwin1 = [
             markers.o, markers.o, markers.o,
             markers.x, markers.b, markers.x,
-            markers.b, markers.x
+            markers.b, markers.x, 
         ]
-        assert.throw(function () { new board(positionXwin1, markers.o)});
+        assert.throw(function () { new board(positionXwin1, markers.o, false)});
     });
     it("should throw", () =>{
         let positionXwin1 = [
@@ -52,7 +52,7 @@ describe('Board - validatePosition', () => {
             markers.b, markers.b, markers.x,
             markers.b, markers.x, markers.x, markers.b
         ]
-        assert.throw(function () { new board(positionXwin1, markers.o)});
+        assert.throw(function () { new board(positionXwin1, markers.o, false)});
     });
     it("should throw", () =>{
         let positionXwin1 = [
@@ -60,7 +60,16 @@ describe('Board - validatePosition', () => {
             markers.b, markers.b, markers.x,
             markers.b, markers.x, markers.b
         ]
-        assert.throw(function () { new board(positionXwin1, markers.o)});
+        assert.throw(function () { new board(positionXwin1, markers.o, false)});
+    });
+    it("should not throw", () =>{
+        let positionOResign = [
+            markers.b, markers.b, markers.o,
+            markers.x, markers.x, markers.b,
+            markers.b, markers.b, markers.b
+        ]
+        let testBoard = new board(positionOResign, markers.x, true);
+        assert.doesNotThrow(testBoard.ValidatePosition,Error )
     });
 
  });
@@ -73,7 +82,7 @@ describe('Board - set correct winner', () => {
             markers.x, markers.x, markers.x,
             markers.b, markers.o, markers.b
         ]
-        let testBoard = new board(positionXwin1, markers.o) 
+        let testBoard = new board(positionXwin1, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.xwins);
     });
@@ -83,7 +92,7 @@ describe('Board - set correct winner', () => {
             markers.x, markers.o, markers.b,
             markers.x, markers.b, markers.o
         ]
-        let testBoard = new board(positionXwin2, markers.o) 
+        let testBoard = new board(positionXwin2, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.xwins);
     });
@@ -93,7 +102,7 @@ describe('Board - set correct winner', () => {
             markers.o, markers.x, markers.b,
             markers.x, markers.b, markers.b
         ]
-        let testBoard = new board(positionXwin3, markers.o) 
+        let testBoard = new board(positionXwin3, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.xwins);
     });
@@ -103,7 +112,7 @@ describe('Board - set correct winner', () => {
             markers.x, markers.b, markers.x,
             markers.o, markers.o, markers.o
         ]
-        let testBoard = new board(positionOwin1, markers.o) 
+        let testBoard = new board(positionOwin1, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.owins);
     });
@@ -113,7 +122,7 @@ describe('Board - set correct winner', () => {
             markers.x, markers.o, markers.b,
             markers.x, markers.o, markers.x
         ]
-        let testBoard = new board(positionOwin2, markers.o) 
+        let testBoard = new board(positionOwin2, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.owins);
     });
@@ -123,7 +132,7 @@ describe('Board - set correct winner', () => {
             markers.b, markers.o, markers.b,
             markers.x, markers.x, markers.o
         ]
-        let testBoard = new board(positionOwin3, markers.o) 
+        let testBoard = new board(positionOwin3, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.owins);
     });
@@ -133,7 +142,7 @@ describe('Board - set correct winner', () => {
             markers.b, markers.b, markers.b,
             markers.b, markers.b, markers.b
         ]
-        let testBoard = new board(positionPlay1, markers.o) 
+        let testBoard = new board(positionPlay1, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.play);
     });
@@ -143,7 +152,7 @@ describe('Board - set correct winner', () => {
             markers.o, markers.o, markers.x,
             markers.b, markers.x, markers.o
         ]
-        let testBoard = new board(positionPlay2, markers.x) 
+        let testBoard = new board(positionPlay2, markers.x, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.play);
     });
@@ -153,7 +162,7 @@ describe('Board - set correct winner', () => {
             markers.o, markers.o, markers.x,
             markers.x, markers.o, markers.x
         ]
-        let testBoard = new board(positionDraw1, markers.o) 
+        let testBoard = new board(positionDraw1, markers.o, false) 
         const result = testBoard.GetGameStatus();
         expect(result).to.equal(gameStatuses.draw);
     });

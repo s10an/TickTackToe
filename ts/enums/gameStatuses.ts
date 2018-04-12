@@ -2,5 +2,7 @@ export enum gameStatuses{
     "xwins",
     "owins",
     "draw",
-    "play"
+    "play",
+    "xresign",
+    "oresign"
 }
