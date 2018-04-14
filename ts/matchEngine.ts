@@ -16,11 +16,7 @@ import { dateTimeUtil } from "./common/dateTimeUtil";
 // /// <reference path="./enums/gameStatuses" />
 
 export class matchEngine{
-    readonly positionStart: Array<markers> = [
-        markers.b, markers.b, markers.b,
-        markers.b, markers.b, markers.b,
-        markers.b, markers.b, markers.b
-    ];
+
 
     public numberOfGames : number = 10;
 
@@ -43,7 +39,7 @@ export class matchEngine{
 
     public Play = (player1: iPlayer, player2: iPlayer, playerToStart: iPlayer) : void =>
     {
-        let currentBoard : board = new board(this.positionStart, playerToStart.playerMarker, false);
+        let currentBoard : board = board.GetNewBoard(playerToStart);
         let completeGame : Array<board> = [currentBoard];
         let playerToMove : iPlayer = playerToStart;
         let notGameOver = true;

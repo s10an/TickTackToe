@@ -1,5 +1,6 @@
 import {playerBase} from "./playerBase";
 import {markers} from "./../enums/markers";
+import {gameStatuses} from "./../enums/gameStatuses";
 import {board} from "./../common/board";
 import {utils} from "./../common/utils";
 import { fileUtils } from "../common/fileUtils";
@@ -26,7 +27,23 @@ export class playerMenace extends playerBase  {
     }
 
     public LearnFromGame = (completeGame : Array<board>) => {
-        // Go troug game and change weights
+        
+        completeGame.forEach(board => {
+            board.GameStatus
+        });
+    }
+
+    public CheckResultForLearning = (lastBoard : board) : myResult => {
+        if(lastBoard.GameStatus == gameStatuses.play) throw new Error("Error in playerMenance - LearnFromGame: Game not finished");
+        if(this.playerMarker == markers.x){
+            if(lastBoard.GameStatus == gameStatuses.oresign || lastBoard.GameStatus == gameStatuses.xwins) return myResult.win;
+            else if(lastBoard.GameStatus == gameStatuses.xresign || lastBoard.GameStatus == gameStatuses.owins) return myResult.lost;
+        }
+        if(this.playerMarker == markers.o){
+            if(lastBoard.GameStatus == gameStatuses.xresign || lastBoard.GameStatus == gameStatuses.owins) return myResult.win;
+            else if(lastBoard.GameStatus == gameStatuses.oresign || lastBoard.GameStatus == gameStatuses.xwins) return myResult.lost;
+        }
+        return myResult.draw;
     }
 
     // load matchBoxes
@@ -102,14 +119,18 @@ export class playerMenace extends playerBase  {
         matchBox.weight.forEach(w => {
             totalWeights += w
         });
-        if(totalWeights < 1) move = -1;
-        let selectedWeightIndex = utils.randomInt(0,totalWeights);
+        if(totalWeights < 1) return -1;
+        let selectedWeightIndex = utils.randomInt(1,totalWeights);
         let currentTotalWeights = 0;
         for (let i = 0; i < matchBox.weight.length; i++) {
-            currentTotalWeights =+ matchBox.weight[i];
-            if(this.checkSelectedWeight(selectedWeightIndex, currentTotalWeights)) move = i;
+            currentTotalWeights = currentTotalWeights + matchBox.weight[i];
+            if(this.checkSelectedWeight(selectedWeightIndex, currentTotalWeights)){
+                if(matchBox.position[i] != markers.b) throw new Error("Error in playerMenance - selectMoveWithLearning: Illegal move selected");
+                move = i;
+                break;
+            }
         }
-        if (move == -10) throw  new Error("No move selected, and player dont resign");
+        if (move == -10) throw  new Error("Error in playerMenance - selectMoveWithLearning: No move selected, and player dont resign");
         return move;
     }
 
@@ -126,6 +147,12 @@ export class playerMenace extends playerBase  {
 class move{
     public position: Array<markers>;
     myMove : number;
+}
+
+export enum myResult{
+    win,
+    lost,
+    draw
 }
 
 export class matchBox{

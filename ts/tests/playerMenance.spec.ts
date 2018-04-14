@@ -5,12 +5,14 @@ import {gameStatuses} from "./../enums/gameStatuses";
 import 'mocha';
 import { expect } from 'chai';
 import { assert } from 'chai';
-import { playerMenace } from "../players/playerMenace";
 import { matchBox } from "../players/playerMenace";
+import { playerMenace } from "../players/playerMenace";
+import { myResult } from "../players/playerMenace";
 import {fs} from "file-system";
 import { fileUtils } from "../common/fileUtils";
 
 var testMenancePlayerX = new playerMenace(markers.x, "testPlayerX", false);
+var testMenancePlayerO = new playerMenace(markers.o, "testPlayerO", false);
 testMenancePlayerX.matchBoxes = new Array<matchBox>();
 
 let testMatchBox1  = new matchBox();
@@ -215,5 +217,134 @@ describe('playerMenace - test menance player', () => {
         testMatchBox.position = [markers.o, markers.o, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b]
         testMatchBox.weight = [ 1, 0, 3, 0, 5, 0, 2, 0, 10 ];
         assert.throw(function () { testMenancePlayerX.validateMatchBox(testMatchBox)});
+    });
+    it("selectMoveLearning 1 - should return -1 (reign since player cant select move based on weights) ", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.o, markers.o, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b]
+        testMatchBox.weight = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.equal(-1);
+    });
+    it("selectMoveLearning 2 - should return index 0", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b]
+        testMatchBox.weight = [ 1, 0, 0, 0, 0, 0, 0, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.equal(0);
+    });
+    it("selectMoveLearning 3 - should return index 0 or 1", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b]
+        testMatchBox.weight = [ 1, 2, 0, 0, 0, 0, 0, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.oneOf([0,1]);
+    });
+    it("selectMoveLearning 4 - should return index 4", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 0, 0, 0, 0, 10, 0, 0, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.equal(4);
+    });
+    it("selectMoveLearning 5 - should return index 0 , 1 , 6 or 8", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 1, 2, 0, 0, 0, 0, 6, 0, 5 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.oneOf([0,1,6,8]);
+    });
+    it("selectMoveLearning 6 - should return index 6", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 0, 0, 0, 0, 0, 0, 1, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.equal(6);
+    });
+    it("selectMoveLearning 7 - should return index 4 or 6", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 0, 0, 0, 0, 5, 0, 1, 0, 0 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.oneOf([4,6]);
+    });
+    it("selectMoveLearning 8 - should return index 4 or 6", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 0, 0, 1, 0, 0, 0, 0, 0, 1 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+
+        expect(index).to.oneOf([2,8]);
+    });
+    it("selectMoveLearning 9 - should return index 0, 1, 4 or 8", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 20, 15, 0, 0, 18, 0, 0, 0, 9 ];
+        let index = testMenancePlayerX.selectMoveWithLearning(testMatchBox);
+        expect(index).to.oneOf([0,1,4,8]);
+    });
+    it("selectMoveLearning  - should throw because illegal move", () =>{
+        let testMatchBox  = new matchBox();
+        testMatchBox.position = [markers.b, markers.b, markers.b,markers.x, markers.b, markers.o,  markers.b, markers.x, markers.b];
+        testMatchBox.weight = [ 0, 0, 0, 4, 0, 0, 0, 0, 0 ];
+        assert.throw(function () { testMenancePlayerX.selectMoveWithLearning(testMatchBox)});
+    });
+    it("CheckResult 1 - should throw since game is not ready", () =>{
+        let positionPlay = [
+            markers.o, markers.x, markers.b,
+            markers.b, markers.o, markers.b,
+            markers.x, markers.x, markers.b
+        ]
+        let testBoard = new board(positionPlay, markers.o, false) 
+        assert.throw(function () { testMenancePlayerX.CheckResultForLearning(testBoard)});
+    });
+    it("CheckResult 2 - should return lost", () =>{
+        let positionOwin = [
+            markers.o, markers.x, markers.b,
+            markers.b, markers.o, markers.b,
+            markers.x, markers.x, markers.o
+        ]
+        let testBoard = new board(positionOwin, markers.o, false);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        expect(result).to.equal(myResult.lost);
+    });
+    it("CheckResult 3 - should return win", () =>{
+        let positionXwin = [
+            markers.o, markers.x, markers.b,
+            markers.b, markers.x, markers.b,
+            markers.o, markers.x, markers.o
+        ]
+        let testBoard = new board(positionXwin, markers.x, false);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        expect(result).to.equal(myResult.win);
+    });
+    it("CheckResult 4 - should return draw", () =>{
+        let positionDraw = [
+            markers.o, markers.o, markers.x,
+            markers.x, markers.x, markers.o,
+            markers.o, markers.x, markers.o
+        ]
+        let testBoard = new board(positionDraw, markers.x, false);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        expect(result).to.equal(myResult.draw);
+    });
+    it("CheckResult 5 - should return win", () =>{
+        let positionOwin = [
+            markers.o, markers.x, markers.b,
+            markers.o, markers.b, markers.b,
+            markers.o, markers.x, markers.x
+        ]
+        let testBoard = new board(positionOwin, markers.o, false);
+        let result = testMenancePlayerO.CheckResultForLearning(testBoard);
+        expect(result).to.equal(myResult.win);
+    });
+    it("CheckResult 6 - should return win", () =>{
+        let positionOwin = [
+            markers.o, markers.b, markers.b,
+            markers.x, markers.o, markers.b,
+            markers.b, markers.b, markers.b
+        ]
+        let testBoard = new board(positionOwin, markers.o, true);
+        let result = testMenancePlayerO.CheckResultForLearning(testBoard);
+        expect(result).to.equal(myResult.win);
     });
 });

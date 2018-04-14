@@ -11,17 +11,6 @@ var testRandomPlayerO = new playerRandom(markers.o, "testPlayerO", false);
 var testRandomPlayerX = new playerRandom(markers.x, "testPlayerX", false);
 
 describe('playerRandom - test random player and playerBase methodes', () => {
-    it("should return marker.x", () =>{
-        let opponentsMarker = testRandomPlayerX.GetOpponentsMarker();        
-        expect(opponentsMarker).to.equal(markers.o);
-    });
-
-    it("should return marker.o", () =>{
-
-        let opponentsMarker = testRandomPlayerO.GetOpponentsMarker();        
-        expect(opponentsMarker).to.equal(markers.x);
-    });
-
     it("should return value between or equal to 0 - 1", () =>{
         let randomNumber = utils.randomInt(0,1);        
         expect(randomNumber).to.oneOf([0,1]);
@@ -92,6 +81,21 @@ describe('playerRandom - test random player and playerBase methodes', () => {
         });
         //console.log("number of o markers: " + oMarkers.length);
         expect(oMarkers.length).to.equal(3);
+    });
+    it("moveAndMarker - player sould add moves to moveAndMarker", () =>{
+        let testFinalPostition = [
+            markers.b, markers.b, markers.b,
+            markers.b, markers.b, markers.b,
+            markers.b, markers.b, markers.b
+        ]
+        let startBoard : board = board.GetNewBoard(markers.x);
+        let board1 = testRandomPlayerX.Move(startBoard);
+        let board2 = testRandomPlayerO.Move(board1);
+        let board3 = testRandomPlayerX.Move(board2);
+        board3.moveSequence.forEach(move => {
+            testFinalPostition[move.moveIndex] = move.marker;
+        });
+        expect(board3.position.toString()).to.equal(testFinalPostition.toString());
     });
 });
 

@@ -7,7 +7,7 @@ export class utils {
     }
 
     public static randomInt(min, max){
-        return Math.floor(Math.random() * (max - min + 1));
+        return Math.floor(Math.random() * Math.floor(max-min)) + min;
      }
 
      public static indexesOfMax(arr) : Array<number> {

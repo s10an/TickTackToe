@@ -3,10 +3,14 @@
 import {markers} from "./../enums/markers";
 import {gameStatuses} from "./../enums/gameStatuses";
 
+export class moveAndMarker {
+    constructor(public readonly marker: markers, public readonly moveIndex: number){}
+}
 
 export class board{
 
     readonly GameStatus: gameStatuses;
+    public moveSequence = Array<moveAndMarker>();
 
     constructor(public position: Array<markers>, public markerToMove: markers, public playerResign : boolean){
         this.ValidatePosition();
@@ -16,21 +20,36 @@ export class board{
 
     public GetGameStatus = (): gameStatuses => {
         if(this.playerResign) {
-            if (this.CheckPositionWinning(markers.x))  return gameStatuses.xresign ;
-            else return  gameStatuses.oresign;    
+            if (this.markerToMove == markers.x)  return gameStatuses.oresign ;
+            else return  gameStatuses.xresign;    
         }
         if (this.CheckPositionWinning(markers.x))  return gameStatuses.xwins ;
         if (this.CheckPositionWinning(markers.o)) return  gameStatuses.owins;
         if(this.CheckNoLegalMoves()) return gameStatuses.draw;
         return gameStatuses.play;
-        
+    }
+    
+    public GetNewBoard = (moveIndex: number, playerResign : boolean) : board => {
+        let newPostition : Array<markers>;
+        if(playerResign) newPostition = this.position.slice(0);
+        else newPostition = this.GetNewPosition(moveIndex); 
+        let opponentsMarker = this.GetOpponentsMarker();
+        let newBoard = new board(newPostition, opponentsMarker, playerResign);
+        newBoard.moveSequence = this.moveSequence.slice(0);
+        newBoard.moveSequence.push(new moveAndMarker(this.markerToMove, moveIndex));
+        return newBoard;
     }
 
-    protected GetNewPosition = (moveIndex: number, currentBoard: board, playerMarker : markers) : Array<markers> => {
-        let newPosition = currentBoard.position.slice(0);
+    public GetOpponentsMarker = () : markers => {
+        if(this.markerToMove == markers.x) return markers.o;
+        return markers.x;
+    }
+
+    public GetNewPosition = (moveIndex: number) : Array<markers> => {
+        let newPosition = this.position.slice(0);
         if(moveIndex < 0 || moveIndex > 8 ) throw Error("Illegal move");
         if(newPosition[moveIndex] != markers.b) throw Error("Player marker already at this position");
-        newPosition[moveIndex] = playerMarker;
+        newPosition[moveIndex] = this.markerToMove;
         return newPosition;
     }
 
@@ -85,6 +104,17 @@ export class board{
         if(xMarkers.length - oMarkers.length == 0) return;
         throw new Error("Diff between markers on board are wrong");
     }
+
+    public static GetNewBoard = (markerToStart: markers) : board => {
+        let positionStart: Array<markers> = [
+            markers.b, markers.b, markers.b,
+            markers.b, markers.b, markers.b,
+            markers.b, markers.b, markers.b
+        ];
+        let startBoard : board = new board(positionStart, markerToStart, false);
+        return startBoard;
+    }
+
 }
 
 
