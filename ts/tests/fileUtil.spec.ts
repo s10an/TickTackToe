@@ -38,7 +38,7 @@ describe('fileUtil', () => {
             markers.x, markers.o, markers.b,
             markers.x, markers.b, markers.o
         ]
-        let testBoard = new board(position, markers.o) 
+        let testBoard = new board(position, markers.o, false) 
         let filePath = "./ts/tests/testFiles/test_save_json.json";
         fileUtils.saveObjectToFile(filePath, testBoard);
         var result : boolean; 

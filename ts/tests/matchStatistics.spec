@@ -24,7 +24,7 @@ describe('matchStatistics - test updateResult', () => {
             markers.x, markers.x, markers.x,
             markers.b, markers.o, markers.b
         ]
-        let testBoard = new board(positionXwin1, markers.o)
+        let testBoard = new board(positionXwin1, markers.o, false)
         matchStatistics.updateResult(testBoard);
         matchStatistics.updateResult(testBoard);
         expect(matchStatistics.stats.playerXWins).to.equal(2);
@@ -36,7 +36,7 @@ describe('matchStatistics - test updateResult', () => {
             markers.x, markers.b, markers.x,
             markers.o, markers.o, markers.o
         ]
-        let testBoard = new board(positionOwin1, markers.o);
+        let testBoard = new board(positionOwin1, markers.o, false);
         matchStatistics.updateResult(testBoard);
         expect(matchStatistics.stats.playerOWins).to.equal(1);
     });
@@ -47,7 +47,7 @@ describe('matchStatistics - test updateResult', () => {
             markers.o, markers.o, markers.x,
             markers.x, markers.o, markers.x
         ]
-        let testBoard = new board(positionDraw1, markers.o) 
+        let testBoard = new board(positionDraw1, markers.o, false) 
         matchStatistics.updateResult(testBoard);
         matchStatistics.updateResult(testBoard);
         matchStatistics.updateResult(testBoard);
@@ -64,7 +64,7 @@ describe('matchStatistics - test updateResult', () => {
             markers.b, markers.o, markers.b,
             markers.b, markers.b, markers.b
         ]
-        let testBoard = new board(positionDraw1, markers.o);
+        let testBoard = new board(positionDraw1, markers.o, false);
         assert.throw(function () { matchStatistics.updateResult(testBoard)});
     });
 

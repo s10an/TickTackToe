@@ -13,9 +13,12 @@ export class playerMenace extends playerBase  {
 
     readonly PlayerEngineId = 1001;
     public readonly initMoveWeight = 3;
+    public readonly winReward = 3;
+    public readonly drawReward = 1;
+    public readonly lostPunishment = 1;
     knowledgeFilePath = "./ts/players/Data/knowledge_" + this.PlayerEngineId + ".json";
     matchBoxes = Array<matchBox>();
-    private moves = Array<move>();
+    public moves = Array<move>();
 
     public CalculateMove = (currentBoard : board) : number => {
         let moveIndex = 0;
@@ -23,25 +26,41 @@ export class playerMenace extends playerBase  {
         let i = 0;
         let matchBox : matchBox = this.getMatcBox(currentBoard.position);
         if(!this.learingMode) moveIndex = this.selectMoveNoLearning(matchBox);
+        else {
+            moveIndex = this.selectMoveWithLearning(matchBox);
+            let thisMove = new move(matchBox, moveIndex);
+            this.moves.push(thisMove);
+        }
         return moveIndex;
     }
 
-    public LearnFromGame = (completeGame : Array<board>) => {
-        
-        completeGame.forEach(board => {
-            board.GameStatus
-        });
+    public LearnFromGame = (finalGameResult : gameStatuses) => {
+        for (let i = 0; i < this.moves.length; i++) {
+            if(this.moves[i].matchBox == undefined) throw new Error ("playerMenace LearnFromGame - Cant find MatchBox");
+            let result = this.CheckResultForLearning(finalGameResult);
+            if(this.moves[i].moveIndex != -1 && this.moves[i].matchBox.position[this.moves[i].moveIndex] != markers.b) throw new Error ("playerMenace LearnFromGame - Move index do not point to blank marker. index: " +this.moves[i].moveIndex + "position: " + this.moves[i].matchBox.position);
+            if(result  == myResult.win){
+                this.moves[i].matchBox.weight[this.moves[i].moveIndex] = this.moves[i].matchBox.weight[this.moves[i].moveIndex] + this.winReward;
+            }
+            else if(result == myResult.lost){
+                this.moves[i].matchBox.weight[this.moves[i].moveIndex] = this.moves[i].matchBox.weight[this.moves[i].moveIndex] - this.lostPunishment;
+            }
+            else{
+                this.moves[i].matchBox.weight[this.moves[i].moveIndex] = this.moves[i].matchBox.weight[this.moves[i].moveIndex] + this.drawReward;
+            }
+        }
+        this.moves = [];
     }
 
-    public CheckResultForLearning = (lastBoard : board) : myResult => {
-        if(lastBoard.GameStatus == gameStatuses.play) throw new Error("Error in playerMenance - LearnFromGame: Game not finished");
+    public CheckResultForLearning = (finalGameResult : gameStatuses) : myResult => {
+        if(finalGameResult == gameStatuses.play) throw new Error("Error in playerMenance - LearnFromGame: Game not finished");
         if(this.playerMarker == markers.x){
-            if(lastBoard.GameStatus == gameStatuses.oresign || lastBoard.GameStatus == gameStatuses.xwins) return myResult.win;
-            else if(lastBoard.GameStatus == gameStatuses.xresign || lastBoard.GameStatus == gameStatuses.owins) return myResult.lost;
+            if(finalGameResult == gameStatuses.oresign || finalGameResult == gameStatuses.xwins) return myResult.win;
+            else if(finalGameResult == gameStatuses.xresign || finalGameResult == gameStatuses.owins) return myResult.lost;
         }
         if(this.playerMarker == markers.o){
-            if(lastBoard.GameStatus == gameStatuses.xresign || lastBoard.GameStatus == gameStatuses.owins) return myResult.win;
-            else if(lastBoard.GameStatus == gameStatuses.oresign || lastBoard.GameStatus == gameStatuses.xwins) return myResult.lost;
+            if(finalGameResult == gameStatuses.xresign || finalGameResult == gameStatuses.owins) return myResult.win;
+            else if(finalGameResult == gameStatuses.oresign || finalGameResult == gameStatuses.xwins) return myResult.lost;
         }
         return myResult.draw;
     }
@@ -79,6 +98,7 @@ export class playerMenace extends playerBase  {
         this.validatePosition(position);
         let newMatchBox = new matchBox();
         newMatchBox.position = position;
+
         // remove weigth for all illegal moves
         let w = this.initMoveWeight;
         let weights = [w,w,w,w,w,w,w,w,w ];
@@ -98,7 +118,9 @@ export class playerMenace extends playerBase  {
 
     public validateMatchBox = (matchBox : matchBox) : void => {
         for (let i = 0; i < matchBox.position.length; i++) {
-            if(matchBox.position[i] != markers.b && matchBox.weight[i] > 0 ) throw new Error("Validation error in MatchBox weight. Illegal move have weight");
+            if(matchBox.position[i] != markers.b && matchBox.weight[i] > 0 ){
+                throw new Error("Validation error in MatchBox weight. Illegal move have weight");
+            }
         }
     }
 
@@ -144,9 +166,8 @@ export class playerMenace extends playerBase  {
     
 }
 
-class move{
-    public position: Array<markers>;
-    myMove : number;
+export class move{
+    constructor(public readonly matchBox : matchBox, public readonly moveIndex : number){}
 }
 
 export enum myResult{

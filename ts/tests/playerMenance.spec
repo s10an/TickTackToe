@@ -6,6 +6,7 @@ import 'mocha';
 import { expect } from 'chai';
 import { assert } from 'chai';
 import { matchBox } from "../players/playerMenace";
+import { move } from "../players/playerMenace";
 import { playerMenace } from "../players/playerMenace";
 import { myResult } from "../players/playerMenace";
 import {fs} from "file-system";
@@ -294,8 +295,9 @@ describe('playerMenace - test menance player', () => {
             markers.b, markers.o, markers.b,
             markers.x, markers.x, markers.b
         ]
-        let testBoard = new board(positionPlay, markers.o, false) 
-        assert.throw(function () { testMenancePlayerX.CheckResultForLearning(testBoard)});
+        let testBoard = new board(positionPlay, markers.o, false);
+        testMenancePlayerO.switchInternalMarkers(testBoard); 
+        assert.throw(function () { testMenancePlayerX.CheckResultForLearning(testBoard.GameStatus)});
     });
     it("CheckResult 2 - should return lost", () =>{
         let positionOwin = [
@@ -304,7 +306,8 @@ describe('playerMenace - test menance player', () => {
             markers.x, markers.x, markers.o
         ]
         let testBoard = new board(positionOwin, markers.o, false);
-        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        testMenancePlayerO.switchInternalMarkers(testBoard);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard.GameStatus);
         expect(result).to.equal(myResult.lost);
     });
     it("CheckResult 3 - should return win", () =>{
@@ -314,7 +317,7 @@ describe('playerMenace - test menance player', () => {
             markers.o, markers.x, markers.o
         ]
         let testBoard = new board(positionXwin, markers.x, false);
-        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard.GameStatus);
         expect(result).to.equal(myResult.win);
     });
     it("CheckResult 4 - should return draw", () =>{
@@ -324,7 +327,7 @@ describe('playerMenace - test menance player', () => {
             markers.o, markers.x, markers.o
         ]
         let testBoard = new board(positionDraw, markers.x, false);
-        let result = testMenancePlayerX.CheckResultForLearning(testBoard);
+        let result = testMenancePlayerX.CheckResultForLearning(testBoard.GameStatus);
         expect(result).to.equal(myResult.draw);
     });
     it("CheckResult 5 - should return win", () =>{
@@ -334,17 +337,59 @@ describe('playerMenace - test menance player', () => {
             markers.o, markers.x, markers.x
         ]
         let testBoard = new board(positionOwin, markers.o, false);
-        let result = testMenancePlayerO.CheckResultForLearning(testBoard);
+        testBoard.GameStatus = testBoard.GetGameStatus();
+        let result = testMenancePlayerO.CheckResultForLearning(testBoard.GameStatus);
         expect(result).to.equal(myResult.win);
     });
     it("CheckResult 6 - should return win", () =>{
         let positionOwin = [
             markers.o, markers.b, markers.b,
             markers.x, markers.o, markers.b,
-            markers.b, markers.b, markers.b
+            markers.b, markers.x, markers.b
         ]
         let testBoard = new board(positionOwin, markers.o, true);
-        let result = testMenancePlayerO.CheckResultForLearning(testBoard);
+        testBoard.GameStatus = testBoard.GetGameStatus();
+        let result = testMenancePlayerO.CheckResultForLearning(testBoard.GameStatus);
         expect(result).to.equal(myResult.win);
+    });
+});
+
+describe('playerMenace - test LearnFromGame', () => {
+    let learnMatchBox1 :matchBox;
+    let learnMatchBox2 :matchBox;
+    let learnMatchBox3 :matchBox;
+    beforeEach( () => { 
+        let position1 = [markers.x, markers.b, markers.b,markers.b, markers.b, markers.b,  markers.b, markers.b, markers.b]
+        learnMatchBox1  = testMenancePlayerO.getMatcBox(position1);
+        testMenancePlayerO.moves.push(new move(learnMatchBox1, 1));
+        let position2 = [markers.x, markers.o, markers.x,markers.b, markers.b, markers.b,  markers.b, markers.b, markers.b]
+        learnMatchBox2  = testMenancePlayerO.getMatcBox(position2);
+        testMenancePlayerO.moves.push(new move(learnMatchBox2, 4));
+        let position3 = [markers.x, markers.o, markers.x,markers.x, markers.o, markers.b,  markers.b, markers.b, markers.b]
+        learnMatchBox3  = testMenancePlayerO.getMatcBox(position3);
+        testMenancePlayerO.moves.push(new move(learnMatchBox3, 8));
+        testMenancePlayerO.knowledgeFilePath = "./ts/tests/testFiles/loadKnowledgeMenanceTest.json";
+        testMenancePlayerO.loadKnowledge();
+        testMenancePlayerO.knowledgeFilePath = "./ts/tests/testFiles/tempKnowledge.json";
+    });
+    it("LearnFromGame 1 - losing, punish moves", () =>{
+        testMenancePlayerO.LearnFromGame(gameStatuses.xwins);
+        expect(learnMatchBox3.weight[8]).to.equal(2);
+    });
+    it("LearnFromGame 2 - draw, should reward moves", () =>{
+        testMenancePlayerO.LearnFromGame(gameStatuses.draw);
+        expect(learnMatchBox2.weight[4]).to.equal(4);
+    });
+    it("LearnFromGame 3 - win, should reward moves", () =>{
+        testMenancePlayerO.LearnFromGame(gameStatuses.owins);
+        expect(learnMatchBox1.weight[1]).to.equal(6);
+    });
+    it("LearnFromGame 4 - opponent resign, should reward moves", () =>{
+        testMenancePlayerO.LearnFromGame(gameStatuses.xresign);
+        expect(learnMatchBox3.weight[8]).to.equal(6);
+    });
+    it("LearnFromGame 4 - resign, should punish moves", () =>{
+        testMenancePlayerO.LearnFromGame(gameStatuses.oresign);
+        expect(learnMatchBox2.weight[4]).to.equal(2);
     });
 });

@@ -11,7 +11,7 @@ class statistics{
     playerOName : string = "";
     playerXId : number = 0;
     playerOId : number = 0;
-    firstMove : Array<board> = new Array<board>();
+    //firstMove : Array<board> = new Array<board>();
     playerNameToStart:string = "";
     playerXWins:number = 0;
     playerOWins:number = 0;
@@ -45,7 +45,7 @@ export class matchStatistics{
     } 
     
     public static setFirstMove = (firstBoard: board):void =>{
-        matchStatistics.stats.firstMove.push(firstBoard);
+        //matchStatistics.stats.firstMove.push(firstBoard);
     }
     public static updateResult = (finalBoard: board):void =>{
         if(finalBoard.GameStatus == gameStatuses.play) throw new Error("Error update final result. Game is not finished");
@@ -64,7 +64,6 @@ export class matchStatistics{
         
 
         if(finalBoard.GameStatus == gameStatuses.draw) matchStatistics.stats.draws++;
-
     }
 
     public static clearStatistics = () : void => {

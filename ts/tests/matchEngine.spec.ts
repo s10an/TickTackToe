@@ -11,14 +11,14 @@ import { assert } from 'chai';
 
 var engine = new matchEngine();
 
-describe('gameEngine - tests', () => {
+describe('matchEngine - tests', () => {
     it("write output", () =>{
-        engine.StartMatch(false);
+        engine.PlayMatch(true);
         //let testBoard = new board(positionXwin1, markers.o);
         //assert.doesNotThrow(testBoard.ValidatePosition,Error )
-    });
+    }).timeout(0);
     it("switchPlayer - should return player2 ", () =>{
-        let player1 : iPlayer = new playerRandom(markers.x, "name1", false);
+        let player1 : iPlayer = new playerRandom(markers.x, "name1", false );
         let player2 : iPlayer = new playerMenace(markers.o, "the Menace", false);
         let playerToMoveFirst = player1;
         playerToMoveFirst = engine.switchPlayer(player1, player2, playerToMoveFirst);

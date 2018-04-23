@@ -1,4 +1,5 @@
 import {markers} from "./../../enums/markers";
+import {gameStatuses} from "./../../enums/gameStatuses";
 import {board} from "./../../common/board";
 // /// <reference path="./../common/position.ts" />
 
@@ -9,6 +10,7 @@ export interface iPlayer {
     readonly playerName : string;
     learingMode : boolean;
     Move(currentBoard : board): board;
-    LearnFromGame(completeGame : Array<board>);
+    LearnFromGame(finalGameResult : gameStatuses);
+    saveKnowledge() : void;
     
 }

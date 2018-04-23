@@ -1,5 +1,6 @@
 import {playerBase} from "./playerBase";
 import {markers} from "./../enums/markers";
+import {gameStatuses} from "./../enums/gameStatuses";
 import {board} from "./../common/board";
 import {utils} from "./../common/utils";
 
@@ -20,12 +21,14 @@ export class playerRandom extends playerBase  {
         return moveIndex;
     }
 
-    public LearnFromGame = (completeGame : Array<board>) => {
+    public LearnFromGame = (finalGameResult : gameStatuses) => {
         // Implemet machine learning
     }
 
     public loadKnowledge = () : void => {
     }
+
+    public saveKnowledge = () : void => {};
 
 
 }

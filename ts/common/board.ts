@@ -9,7 +9,7 @@ export class moveAndMarker {
 
 export class board{
 
-    readonly GameStatus: gameStatuses;
+    public GameStatus: gameStatuses;
     public moveSequence = Array<moveAndMarker>();
 
     constructor(public position: Array<markers>, public markerToMove: markers, public playerResign : boolean){
@@ -105,7 +105,7 @@ export class board{
         throw new Error("Diff between markers on board are wrong");
     }
 
-    public static GetNewBoard = (markerToStart: markers) : board => {
+    public static GetStartBoard = (markerToStart: markers) : board => {
         let positionStart: Array<markers> = [
             markers.b, markers.b, markers.b,
             markers.b, markers.b, markers.b,

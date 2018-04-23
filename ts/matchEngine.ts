@@ -18,9 +18,9 @@ import { dateTimeUtil } from "./common/dateTimeUtil";
 export class matchEngine{
 
 
-    public numberOfGames : number = 10;
+    public numberOfGames : number = 100000;
 
-    public StartMatch = (learingMode : boolean) : void => {
+    public PlayMatch = (learingMode : boolean) : void => {
         // set up players
         let player1 : iPlayer = new playerRandom(markers.x, "name1", learingMode);
         let player2 : iPlayer = new playerMenace(markers.o, "the Menace", learingMode);
@@ -29,17 +29,22 @@ export class matchEngine{
          matchStatistics.initPlayers(player1, player2, playerToMoveFirst);
         // play game
         for (let index = 0; index < this.numberOfGames; index++) {
-            this.Play(player1, player2, playerToMoveFirst);
+            let gameResult : gameStatuses = this.PlayGame(player1, player2, playerToMoveFirst);
             playerToMoveFirst = this.switchPlayer(player1, player2, playerToMoveFirst);
+            if(learingMode){
+                player1.LearnFromGame(gameResult);
+                player2.LearnFromGame(gameResult);
+            }
         }
+        player2.saveKnowledge();
         let dateTime = dateTimeUtil.getCurrentDateTime();
         fileUtils.saveObjectToFile("./data/matchdata."+dateTime+".json", matchStatistics.stats)
         
     }
 
-    public Play = (player1: iPlayer, player2: iPlayer, playerToStart: iPlayer) : void =>
+    public PlayGame = (player1: iPlayer, player2: iPlayer, playerToStart: iPlayer) : gameStatuses =>
     {
-        let currentBoard : board = board.GetNewBoard(playerToStart);
+        let currentBoard : board = board.GetStartBoard(playerToStart.playerMarker);
         let completeGame : Array<board> = [currentBoard];
         let playerToMove : iPlayer = playerToStart;
         let notGameOver = true;
@@ -55,6 +60,7 @@ export class matchEngine{
             playerToMove = this.switchPlayer(player1, player2, playerToMove);
         }
         matchStatistics.updateResult(currentBoard);
+        return currentBoard.GameStatus;
     }
 
     public switchPlayer = (player1, player2, currentPlayer) : iPlayer => {
