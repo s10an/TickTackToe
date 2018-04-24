@@ -139,13 +139,13 @@ export class playerMenace extends playerBase  {
         let move : number = -10;
         let totalWeights : number = 0;
         matchBox.weight.forEach(w => {
-            totalWeights += w
+            if (w > 0) totalWeights += w;
         });
         if(totalWeights < 1) return -1;
         let selectedWeightIndex = utils.randomInt(1,totalWeights);
         let currentTotalWeights = 0;
         for (let i = 0; i < matchBox.weight.length; i++) {
-            currentTotalWeights = currentTotalWeights + matchBox.weight[i];
+            if(matchBox.weight[i] > 0) currentTotalWeights = currentTotalWeights + matchBox.weight[i];
             if(this.checkSelectedWeight(selectedWeightIndex, currentTotalWeights)){
                 if(matchBox.position[i] != markers.b) throw new Error("Error in playerMenance - selectMoveWithLearning: Illegal move selected");
                 move = i;

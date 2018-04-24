@@ -18,7 +18,7 @@ import { dateTimeUtil } from "./common/dateTimeUtil";
 export class matchEngine{
 
 
-    public numberOfGames : number = 100000;
+    public numberOfGames : number = 10;
 
     public PlayMatch = (learingMode : boolean) : void => {
         // set up players
@@ -52,14 +52,14 @@ export class matchEngine{
         while(currentBoard.GameStatus == gameStatuses.play)
         {
             let newBoard = playerToMove.Move(currentBoard)
-            if(isFirstMove) matchStatistics.setFirstMove(newBoard);
+            //if(isFirstMove) matchStatistics.setFirstMove(newBoard);
             isFirstMove = false;
             completeGame.push(newBoard);
             currentBoard = newBoard;
             newBoard = null;
             playerToMove = this.switchPlayer(player1, player2, playerToMove);
         }
-        matchStatistics.updateResult(currentBoard);
+        matchStatistics.updateResult(completeGame, playerToStart);
         return currentBoard.GameStatus;
     }
 
