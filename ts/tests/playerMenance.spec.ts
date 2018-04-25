@@ -96,7 +96,7 @@ describe('playerMenace - test menance player', () => {
         testMenancePlayerX.knowledgeFilePath = "./ts/tests/testFiles/loadKnowledgeMenanceTest.json";
         testMenancePlayerX.loadKnowledge();
         let result = testMenancePlayerX.getMatcBox(testMatchBox.position);
-        expect(result.position).to.equal(testMatchBox.position);
+        expect(result.position).to.deep.equal(testMatchBox.position);
     });
     it("getMatcBox 2 - should not add matcbox", () =>{
         let testMatchBox  = new matchBox();

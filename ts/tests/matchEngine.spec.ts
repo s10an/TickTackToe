@@ -13,7 +13,7 @@ var engine = new matchEngine();
 
 describe('matchEngine - tests', () => {
     it("write output", () =>{
-        engine.PlayMatch(true);
+        engine.PlayMatch(false);
         //let testBoard = new board(positionXwin1, markers.o);
         //assert.doesNotThrow(testBoard.ValidatePosition,Error )
     }).timeout(0);

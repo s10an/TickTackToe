@@ -77,33 +77,43 @@ export class playerMenace extends playerBase  {
     }
     // save matchboxes
     public saveKnowledge = () : void => {
+        console.log(this.matchBoxes.length);
         fileUtils.saveObjectToFile(this.knowledgeFilePath, this.matchBoxes)
     }
 
     public getMatcBox = (position : Array<markers>) : matchBox => {
         this.validatePosition(position);
         let matchBox = null;
-        this.matchBoxes.forEach(existingMatchBox => {
-            if(existingMatchBox.position.toString() === position.toString()){
-                matchBox = existingMatchBox;
-                return;
+        for (let i = 0; i < this.matchBoxes.length; i++) {
+            if(this.isIdenticalPositions(this.matchBoxes[i].position, position)){
+                return this.matchBoxes[i];
             }  
-        });
-        if (matchBox === null) matchBox = this.createNewMatchBox(position);
+        }
+        matchBox = this.createNewMatchBox(position);
         this.validateMatchBox(matchBox);
         return matchBox;
+    }
+
+    private isIdenticalPositions = (position1 : Array<markers>, position2 : Array<markers>) : boolean => {
+        for (let i = 0; i < position1.length; i++) {
+            if(position1[i].toString() != position2[i].toString()){
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     public createNewMatchBox = (position : Array<markers>) : matchBox => {
         this.validatePosition(position);
         let newMatchBox = new matchBox();
-        newMatchBox.position = position;
+        newMatchBox.position = position.slice();
 
         // remove weigth for all illegal moves
         let w = this.initMoveWeight;
         let weights = [w,w,w,w,w,w,w,w,w ];
         let i = 0;
-        position.forEach(marker => {
+        newMatchBox.position.forEach(marker => {
             if(marker != markers.b) weights[i] = -1;
             i ++;
         });

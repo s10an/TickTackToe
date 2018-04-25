@@ -36,7 +36,7 @@ export class matchEngine{
                 player2.LearnFromGame(gameResult);
             }
         }
-        player2.saveKnowledge();
+        if(learingMode) player2.saveKnowledge();
         let dateTime = dateTimeUtil.getCurrentDateTime();
         fileUtils.saveObjectToFile("./data/matchdata."+dateTime+".json", matchStatistics.stats)
         
