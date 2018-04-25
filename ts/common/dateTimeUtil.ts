@@ -2,7 +2,6 @@ export class dateTimeUtil{
 
     public static getCurrentDateTime = () : string => {
         let date = new Date(Date.now());
-        console.log(date);
         return dateTimeUtil.toStringLocal(date);
     }
 

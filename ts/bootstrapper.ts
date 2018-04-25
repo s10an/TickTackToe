@@ -1,6 +1,6 @@
-import {gameEngine} from "./gameEngine";
+import {matchEngine} from "./matchEngine";
 // /// <reference path="gameEngine.ts" />
 
-var engine = new gameEngine();
-engine.StartTrainingMatch();
+var engine = new matchEngine();
+engine.PlayMatch(true);
 ko.applyBindings(engine);

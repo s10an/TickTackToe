@@ -1,11 +1,12 @@
 import {playerBase} from "./playerBase";
 import {markers} from "./../enums/markers";
+import {gameStatuses} from "./../enums/gameStatuses";
 import {board} from "./../common/board";
 import {utils} from "./../common/utils";
 
 export class playerRandom extends playerBase  {
 
-    readonly PlayerEngineId = 1;
+    readonly PlayerEngineId = 1000;
 
     CalculateMove = (currentBoard : board) : number => {
         let moveIndex = 0;
@@ -20,9 +21,14 @@ export class playerRandom extends playerBase  {
         return moveIndex;
     }
 
-    public MachineLearning = (completeGame : Array<board>) => {
+    public LearnFromGame = (finalGameResult : gameStatuses) => {
         // Implemet machine learning
     }
+
+    public loadKnowledge = () : void => {
+    }
+
+    public saveKnowledge = () : void => {};
 
 
 }
